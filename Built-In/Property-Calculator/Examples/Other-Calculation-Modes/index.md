@@ -38,20 +38,20 @@ Mode:        Pick Substring
 Pick Substrings From: %PROPERTY_{PD.Title}%
 
 Substrings:
-  ┌─ Substring 1: RegExp INV-\d{4}-\d+                          → Save To PD.InvoiceNumber  (extracts "INV-2026-0042")
-  ├─ Substring 2: RegExp (?<=\d{4}\s)[\w\s]+(?=\s\d{2}\.)        → Save To PD.CustomerName   (extracts "Acme Corp")
-  └─ Substring 3: RegExp \d{2}\.\d{2}\.\d{4}                     → Save To PD.DateText       (extracts "15.01.2026")
+  - Substring 1: RegExp INV-\d{4}-\d+                          → Save To PD.InvoiceNumber  (extracts "INV-2026-0042")
+  - Substring 2: RegExp (?<=\d{4}\s)[\w\s]+(?=\s\d{2}\.)        → Save To PD.CustomerName   (extracts "Acme Corp")
+  - Substring 3: RegExp \d{2}\.\d{2}\.\d{4}                     → Save To PD.DateText       (extracts "15.01.2026")
 ```
 
 **Scenario — Named group extraction:**
 ```yaml
 Pick Substrings From: %PROPERTY_{PD.Code}%
 Substrings:
-  └─ Save To:         PD.YearCode
-     Condition Type:  Pick first founded RegExp
-     RegExp:          PRJ-(?<value>\d{4})-[A-Z]+
-     Pick Only Subexpression: ✅
-     → From "PRJ-2026-FIN" extracts just "2026"
+  - Save To:         PD.YearCode
+    Condition Type:  Pick first founded RegExp
+    RegExp:          PRJ-(?<value>\d{4})-[A-Z]+
+    Pick Only Subexpression: ✅
+    → From "PRJ-2026-FIN" extracts just "2026"
 ```
 
 ---
@@ -434,20 +434,20 @@ Conditions:
     Properties: PD.Quantity, PD.UnitPrice, PD.DiscountPercent
 
 Nested Properties:
-  ┌─ Rule 1: "Gross Amount"
-  │  Mode: Calculate Expression
-  │  Property: PD.GrossAmount
-  │  Expression: %PROPERTY_{PD.Quantity}% * %PROPERTY_{PD.UnitPrice}%
-  │
-  ├─ Rule 2: "Discount Amount"
-  │  Mode: Calculate Expression
-  │  Property: PD.DiscountAmount
-  │  Expression: %PROPERTY_{PD.GrossAmount}% * ifNull(%PROPERTY_{PD.DiscountPercent}%, 0) / 100
-  │
-  └─ Rule 3: "Net Amount"
-     Mode: Calculate Expression
-     Property: PD.NetAmount
-     Expression: %PROPERTY_{PD.GrossAmount}% - %PROPERTY_{PD.DiscountAmount}%
+  - Rule 1: "Gross Amount"
+    Mode: Calculate Expression
+    Property: PD.GrossAmount
+    Expression: %PROPERTY_{PD.Quantity}% * %PROPERTY_{PD.UnitPrice}%
+
+  - Rule 2: "Discount Amount"
+    Mode: Calculate Expression
+    Property: PD.DiscountAmount
+    Expression: %PROPERTY_{PD.GrossAmount}% * ifNull(%PROPERTY_{PD.DiscountPercent}%, 0) / 100
+
+  - Rule 3: "Net Amount"
+    Mode: Calculate Expression
+    Property: PD.NetAmount
+    Expression: %PROPERTY_{PD.GrossAmount}% - %PROPERTY_{PD.DiscountAmount}%
 
 → All 3 rules only execute when Quantity, UnitPrice, or DiscountPercent changes
 → The Changed Propertyvalues condition on the group applies to all nested rules
